@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class CreatePlatform : MonoBehaviour
 {
-    [SerializeField] private GameObject[] prefab; 
+    [SerializeField] private GameObject[] prefab;
+    [SerializeField] private GameObject[] Goldprefab;
     [SerializeField] private Vector3 startPosition; // The starting position of the first object
     [SerializeField] private float yOffset = 2.8f; // The amount to offset the Y position by for each new object
     public GameObject GridContinue;
@@ -20,6 +21,7 @@ public class CreatePlatform : MonoBehaviour
     public void CreateNewObject()
     {
         int i = 0;
+        int goldIs = Random.Range(0, 101);
         if (skin.whichOn[0] == true)
         {
             i = Random.Range(0, 2);
@@ -32,9 +34,20 @@ public class CreatePlatform : MonoBehaviour
         {
             i = Random.Range(2, 4);
         }
+        else if (skin.whichOn[3] == true)
+        {
+            i = Random.Range(4, 6);
+        }
         CountGrid++;
         Vector3 newPosition = lastObject.transform.position + new Vector3(0, yOffset, 0); // Calculate the new position
-        lastObject = Instantiate(prefab[i], newPosition, Quaternion.identity); // Instantiate the new object
+        if (goldIs != 100)
+        {
+            lastObject = Instantiate(prefab[i], newPosition, Quaternion.identity); // Instantiate the first object
+        }
+        else
+        {
+            lastObject = Instantiate(Goldprefab[i], newPosition, Quaternion.identity); // Instantiate the first object
+        }
         if (CountGrid > 1)
         {
             CountGrid = 0;
@@ -74,6 +87,7 @@ public class CreatePlatform : MonoBehaviour
         playerLogic.gameIs = true;
         playerLogic.countLevel = 0;
         int i = 0;
+        int goldIs = Random.Range(0, 101);
         if (skin.whichOn[0] == true)
         {
             i = Random.Range(0, 2);
@@ -86,7 +100,19 @@ public class CreatePlatform : MonoBehaviour
         {
             i = Random.Range(2, 4);
         }
-        lastObject = Instantiate(prefab[i], startPosition, Quaternion.identity); // Instantiate the first object
+        else if (skin.whichOn[3] == true)
+        {
+            i = Random.Range(4, 6);
+        }
+        if (goldIs != 100)
+        {
+            lastObject = Instantiate(prefab[i], startPosition, Quaternion.identity); // Instantiate the first object
+        }
+        else
+        {
+            lastObject = Instantiate(Goldprefab[i], startPosition, Quaternion.identity); // Instantiate the first object
+        }
+        
         CountGrid = 2;
         CreateNewObject();
     }

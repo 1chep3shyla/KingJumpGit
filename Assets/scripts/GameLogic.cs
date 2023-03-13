@@ -177,22 +177,42 @@ public class GameLogic : MonoBehaviour
         if (nameBut == "Left")
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
-            if (EM.enemyNames[countLevel] == "left")
+            if (EM.enemyNames[countLevel] == "left" || EM.enemyNames[countLevel] == "left_gold")
             {
                 FXPlayer();
-                if (skins.whichOn[0] == true)
+                if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "left")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("pig_anim_death");
                 }
-                else if (skins.whichOn[1] == true)
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left")
                 {
 
                 }
-                else if (skins.whichOn[2] == true)
+                else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "left")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("bomb_anim_exp");
                 }
-                    countLevel++;
+                else if (skins.whichOn[3] == true && EM.enemyNames[countLevel] == "left")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("enemy_bottle_anim");
+                }
+                else if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "left_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("pigKing_anim_death");
+                }
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left_gold")
+                {
+
+                }
+                else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "left_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("bomb_gold_anim_exp");
+                }
+                else if (skins.whichOn[3] == true && EM.enemyNames[countLevel] == "left_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("enemy_gold_bottle");
+                }
+                countLevel++;
 
                 if (countLevel > countLevelMax)
                 {
@@ -226,22 +246,43 @@ public class GameLogic : MonoBehaviour
         else if (nameBut == "Right")
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
-            if (EM.enemyNames[countLevel] == "right")
+            if (EM.enemyNames[countLevel] == "right" || EM.enemyNames[countLevel] == "right_gold")
             {
                 FXPlayer();
-                if (skins.whichOn[0] == true)
+                if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "right")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("pig_anim_death");
                 }
-                else if (skins.whichOn[1] == true)
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "right")
                 {
 
                 }
-                else if (skins.whichOn[2] == true)
+                else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "right")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("bomb_anim_exp");
                 }
+                else if (skins.whichOn[3] == true && EM.enemyNames[countLevel] == "right")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("enemy_bottle_anim");
+                }
+                else if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "right_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("pigKing_anim_death");
+                }
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "right_gold")
+                {
+
+                }
+                else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "right_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("bomb_gold_anim_exp");
+                }
+                else if (skins.whichOn[3] == true && EM.enemyNames[countLevel] == "right_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("enemy_gold_bottle");
+                }
                 countLevel++;
+
                 if (countLevel > countLevelMax)
                 {
                     countLevelMax = countLevel;

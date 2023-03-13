@@ -25,7 +25,6 @@ public class SkinManager : MonoBehaviour
             {
                 allAnimSkin[0] = idleSkin[i];
                 allAnimSkin[1] = hitSkin[i];
-                allAnimSkin[2] = jumpSkin[i];
                 allAnimSkin[3] = deathSkin[i];
             }
         }
@@ -59,5 +58,15 @@ public class SkinManager : MonoBehaviour
         }
         whichOn[2] = true;
         animator.Play(idleSkin[2]);
+    }
+
+    public void FourthPlayer()
+    {
+        for (int i = 0; i < whichOn.Length; i++)
+        {
+            whichOn[i] = false;
+        }
+        whichOn[3] = true;
+        animator.Play(idleSkin[3]);
     }
 }
