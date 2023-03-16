@@ -17,6 +17,8 @@ public class GameLogic : MonoBehaviour
     public int countLevel;
     public int countLevelMax;
     public Text[] countLevelText;
+    public Text moneyText;
+    public int money;
     [SerializeField] private float height = 2.8f; // The height to raise the object to
     [SerializeField] private float speed = 1f; // The speed at which to move the object
     private EnemyManager EM;
@@ -33,6 +35,14 @@ public class GameLogic : MonoBehaviour
     public CreatePlatform creator;
     public AudioSource[] source;
     public AudioClip[] clips;
+    public Slider mmrSlider;
+    public int mmr;
+    public Text mmrText;
+    public Button[] butReward;
+    public int[] needMMR;
+    public bool[] butRewardGet;
+    public float saveTime;
+    public ShowerAd addCount;
 
 
     void Start()
@@ -46,10 +56,32 @@ public class GameLogic : MonoBehaviour
         skins = gameObject.GetComponent<SkinManager>();
         creator = gameObject.GetComponent<CreatePlatform>();
         gameIs = false;
+        PlayerData data = SaveSystem.LoadPlayer();
+        if (data != null)
+        {
+            LoadStat();
+        }
 
     }
     void Update()
     {
+        saveTime += Time.deltaTime;
+        if (saveTime >= 0.5f)
+        {
+            SaveSystem.SavePlayer(this, skins);
+            saveTime = 0f;
+        }
+        for (int m = 0; m < butReward.Length; m++)
+        {
+            if (mmr >= needMMR[m] && butRewardGet[m] == false)
+            {
+                butReward[m].interactable = true;
+            }
+        }
+        mmrSlider.maxValue = 1200;
+        mmrSlider.value = mmr;
+        mmrText.text = "" + mmr;
+        moneyText.text = "" + money;
         if (countLevel >=0 && countLevel <10)
         {
             maxTime = 5f;
@@ -127,23 +159,25 @@ public class GameLogic : MonoBehaviour
     }
     IEnumerator Losee()
     {
+        mmr += (countLevel / 10);
         LoseGameObject[5].SetActive(false);
         LoseGameObject[6].SetActive(false);
         gameIs = false;
         animator.Play(skins.allAnimSkin[3]);
+        if (skins.whichOn[1] == true)
+        {
+            source[2].PlayOneShot(clips[2]);
+        }
         yield return new WaitForSeconds(1.2f);
         if (skins.whichOn[0] == true)
         {
-        }
-        else if (skins.whichOn[1] == true)
-        {
-
         }
         else if (skins.whichOn[2] == true)
         {
             source[2].PlayOneShot(clips[2]);
         }
         LoseGame();
+        addCount.counting++;
         yield return null;
     }
 
@@ -186,7 +220,7 @@ public class GameLogic : MonoBehaviour
                 }
                 else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left")
                 {
-
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_anim_death");
                 }
                 else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "left")
                 {
@@ -199,18 +233,22 @@ public class GameLogic : MonoBehaviour
                 else if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "left_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("pigKing_anim_death");
+                    money++;
                 }
                 else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left_gold")
                 {
-
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_gold_anim_death");
+                    money++;
                 }
                 else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "left_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("bomb_gold_anim_exp");
+                    money++;
                 }
                 else if (skins.whichOn[3] == true && EM.enemyNames[countLevel] == "left_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("enemy_gold_bottle");
+                    money++;
                 }
                 countLevel++;
 
@@ -227,11 +265,26 @@ public class GameLogic : MonoBehaviour
             }
             else
             {
+                if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "right")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("pig_anim_attack");
+                }
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "right")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_anim_attack");
+                }
+                else if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "right_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("pigKing_anim_Attack");
+                }
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "right_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_gold_anim_attack");
+                }
                 Lose = true;
-                EM.enemies[countLevel].GetComponent<Animator>().Play("pig_anim_attack");
                 animator.Play(skins.allAnimSkin[3]);
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                StartCoroutine(Losee());
+                StartCoroutine(Losee());    
                 if (countLevel > countLevelMax)
                 {
                     countLevelMax = countLevel;
@@ -255,7 +308,7 @@ public class GameLogic : MonoBehaviour
                 }
                 else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "right")
                 {
-
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_anim_death");
                 }
                 else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "right")
                 {
@@ -268,18 +321,22 @@ public class GameLogic : MonoBehaviour
                 else if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "right_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("pigKing_anim_death");
+                    money++;
                 }
                 else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "right_gold")
                 {
-
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_gold_anim_death");
+                    money++;
                 }
                 else if (skins.whichOn[2] == true && EM.enemyNames[countLevel] == "right_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("bomb_gold_anim_exp");
+                    money++;
                 }
                 else if (skins.whichOn[3] == true && EM.enemyNames[countLevel] == "right_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("enemy_gold_bottle");
+                    money++;
                 }
                 countLevel++;
 
@@ -296,7 +353,23 @@ public class GameLogic : MonoBehaviour
             }
             else
             {
-                EM.enemies[countLevel].GetComponent<Animator>().Play("pig_anim_attack");
+                if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "left")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("pig_anim_attack");
+                }
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_anim_attack");
+                }
+                else if (skins.whichOn[0] == true && EM.enemyNames[countLevel] == "left_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("pigKing_anim_Attack");
+                }
+                else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left_gold")
+                {
+                    EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_gold_anim_attack");
+ 
+                }
                 Lose = true;
                 animator.Play(skins.allAnimSkin[3]);
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
@@ -341,6 +414,59 @@ public class GameLogic : MonoBehaviour
                 source[i].pitch = random;
                 source[i].PlayOneShot(clips[i]);
             }
+        }
+    }
+    public void firstReward()
+    {
+        butRewardGet[0] = true;
+        butReward[0].interactable = false;
+        money += 10;
+    }
+    public void secondReward()
+    {
+        butRewardGet[1] = true;
+        butReward[1].interactable = false;
+        money += 15;
+    }
+    public void thirdReward()
+    {
+        butRewardGet[2] = true;
+        butReward[2].interactable = false;
+        money += 20;
+    }
+    public void fourthReward()
+    {
+        butRewardGet[3] = true;
+        butReward[3].interactable = false;
+        money += 30;
+    }
+    public void fivethReward()
+    {
+        butRewardGet[4] = true;
+        butReward[4].interactable = false;
+        money += 50;
+    }
+    public void LoadStat()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+        money = data.moneyData;
+        countLevelMax = data.maxCountData;
+        mmr = data.mmrData;
+        for (int WOD = 0; WOD < skins.whichBuy.Length; WOD++)
+        {
+            skins.whichBuy[WOD] = data.whichBuyData[WOD];
+        }
+        for (int WOC = 0; WOC < skins.whichOn.Length; WOC++)
+        {
+            skins.whichOn[WOC] = data.whichOnData[WOC];
+        }
+        for (int anim = 0; anim < skins.allAnimSkin.Length; anim++)
+        {
+            skins.allAnimSkin[anim] = data.allAnimSkinData[anim];
+        }
+        for (int reward = 0; reward < data.getRewardData.Length; reward++)
+        {
+            butRewardGet[reward] = data.getRewardData[reward];
         }
     }
 }

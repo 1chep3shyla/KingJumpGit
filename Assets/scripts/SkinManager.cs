@@ -12,7 +12,6 @@ public class SkinManager : MonoBehaviour
     private Animator animator;
     public bool[] whichOn;
     public bool[] whichBuy;
-
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();

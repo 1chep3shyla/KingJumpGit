@@ -28,7 +28,7 @@ public class CreatePlatform : MonoBehaviour
         }
         else if (skin.whichOn[1] == true)
         {
-
+            i = Random.Range(6, 8);
         }
         else if (skin.whichOn[2] == true)
         {
@@ -94,7 +94,7 @@ public class CreatePlatform : MonoBehaviour
         }
         else if (skin.whichOn[1] == true)
         {
-
+            i = Random.Range(6, 8);
         }
         else if (skin.whichOn[2] == true)
         {
