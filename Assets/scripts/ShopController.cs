@@ -22,6 +22,13 @@ public class ShopController : MonoBehaviour
             buttonPreChoose[2].onClick.AddListener(BombMan);
             buttonPreChoose[3].onClick.AddListener(Captain);
         }
+        for (int i = 0; i < manager.whichOn.Length; i++)
+        {
+            if (manager.whichOn[i] == true)
+            {
+                animator.Play(manager.idleSkin[i]);
+            }
+        }
     }
     void Update()
     {
@@ -30,6 +37,17 @@ public class ShopController : MonoBehaviour
             if (manager.whichBuy[i] == true && cost[i] != null)
             {
                 cost[i].SetActive(false);
+            }
+        }
+        for (int i = 0; i < manager.whichOn.Length; i++)
+        {
+            if (manager.whichOn[i] == true)
+            {
+                choose[i].SetActive(true);
+            }
+            else
+            {
+                choose[i].SetActive(false);
             }
         }
     }

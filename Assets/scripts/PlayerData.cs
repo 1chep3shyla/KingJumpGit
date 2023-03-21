@@ -14,6 +14,7 @@ public class PlayerData
     public bool[] whichBuyData;
     public string[] allAnimSkinData;
     public bool[] getRewardData;
+    public bool workingAd;
     public PlayerData(GameLogic player, SkinManager skinsData)
     {
         whichOnData = new bool[skinsData.whichOn.Length];
@@ -23,6 +24,7 @@ public class PlayerData
         maxCountData = player.countLevelMax;
         moneyData = player.money;
         mmrData = player.mmr;
+        workingAd = player.addCount.working;
         for (int WOD = 0; WOD < whichBuyData.Length; WOD++)
         {
             whichBuyData[WOD] = skinsData.whichBuy[WOD];
@@ -35,7 +37,7 @@ public class PlayerData
         {
             allAnimSkinData[anim] = skinsData.allAnimSkin[anim];
         }
-        for (int reward = 0; reward < player.butRewardGet.Length; reward++)
+        for (int reward = 0; reward < getRewardData.Length; reward++)
         {
             getRewardData[reward] = player.butRewardGet[reward];
         }

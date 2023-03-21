@@ -42,7 +42,8 @@ public class GameLogic : MonoBehaviour
     public int[] needMMR;
     public bool[] butRewardGet;
     public float saveTime;
-    public ShowerAd addCount;
+    public ShowerAd addCount;   
+    private Rigidbody2D rb;
 
 
     void Start()
@@ -50,6 +51,7 @@ public class GameLogic : MonoBehaviour
         loseTime = maxTime;
         animator = gameObject.GetComponent<Animator>();
         bc = gameObject.GetComponent<BoxCollider2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
         EM = gameObject.GetComponent<EnemyManager>();
         startingPosition = transform.position;
         StartPosInGame = transform.position;
@@ -186,6 +188,7 @@ public class GameLogic : MonoBehaviour
         animator.Play(skins.allAnimSkin[0]);
         transform.position = StartPosInGame;
         Lose = false;
+        countLevel = 0;
         corWork = false;
         loseTime = maxTime;
     }
@@ -201,13 +204,14 @@ public class GameLogic : MonoBehaviour
 
     private IEnumerator MoveObject()
     {
+        rb.gravityScale = 0;
         creator.CreateNewObject();
         startingPosition = curPos;
         corWork = true;
         bc.enabled = false;
         float elapsedTime = 0f;
         animator.Play(skins.allAnimSkin[1]);
-        GameObject copy = Instantiate(particleJump, transform.position , Quaternion.identity);
+        GameObject copy = Instantiate(particleJump, transform.position, Quaternion.identity);
         if (nameBut == "Left")
         {
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
@@ -257,7 +261,7 @@ public class GameLogic : MonoBehaviour
                     countLevelMax = countLevel;
                     recordText.SetActive(true);
                 }
-                else if(countLevel < countLevelMax)
+                else if (countLevel < countLevelMax)
                 {
                     recordText.SetActive(false);
                 }
@@ -284,7 +288,7 @@ public class GameLogic : MonoBehaviour
                 Lose = true;
                 animator.Play(skins.allAnimSkin[3]);
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                StartCoroutine(Losee());    
+                StartCoroutine(Losee());
                 if (countLevel > countLevelMax)
                 {
                     countLevelMax = countLevel;
@@ -368,7 +372,7 @@ public class GameLogic : MonoBehaviour
                 else if (skins.whichOn[1] == true && EM.enemyNames[countLevel] == "left_gold")
                 {
                     EM.enemies[countLevel].GetComponent<Animator>().Play("cannon_gold_anim_attack");
- 
+
                 }
                 Lose = true;
                 animator.Play(skins.allAnimSkin[3]);
@@ -385,20 +389,18 @@ public class GameLogic : MonoBehaviour
                 }
             }
         }
-        if (elapsedTime >= 1f)
-        {
-            bc.enabled = true;
-        }
-        while (elapsedTime < 1f )
+        while (gameObject.transform.position.y < startingPosition.y + 7.535259 - 4.910259)
         {
             float newY = Mathf.Lerp(startingPosition.y, startingPosition.y + height, elapsedTime);
-            transform.position = new Vector3(transform.position.x, newY, transform.position.z); 
-            elapsedTime += Time.deltaTime * speed; 
-            yield return null; 
+            transform.position = new Vector3(0, newY, 0);
+            elapsedTime += Time.deltaTime * speed;
+            yield return null;
         }
-        
+
         corWork = false;
         bc.enabled = true;
+
+        rb.gravityScale = 0.5f;
         if (Lose == false)
         {
             animator.Play(skins.allAnimSkin[0]);
@@ -452,6 +454,7 @@ public class GameLogic : MonoBehaviour
         money = data.moneyData;
         countLevelMax = data.maxCountData;
         mmr = data.mmrData;
+        addCount.working = data.workingAd;
         for (int WOD = 0; WOD < skins.whichBuy.Length; WOD++)
         {
             skins.whichBuy[WOD] = data.whichBuyData[WOD];
@@ -468,5 +471,14 @@ public class GameLogic : MonoBehaviour
         {
             butRewardGet[reward] = data.getRewardData[reward];
         }
+    }
+    
+    public void Donate()
+    {
+        money += 190;
+    }
+    public void OffAdd()
+    {
+        addCount.working = false;
     }
 }

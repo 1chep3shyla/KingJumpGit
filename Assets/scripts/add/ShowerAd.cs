@@ -12,7 +12,7 @@ public class ShowerAd : MonoBehaviour
     {
         if (working == true)
         {
-            if (counting >= 5)
+            if (counting >= 3)
             {
                 shower.ShowAd();
                 counting = 0;

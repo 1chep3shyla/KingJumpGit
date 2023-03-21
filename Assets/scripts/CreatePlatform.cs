@@ -7,7 +7,7 @@ public class CreatePlatform : MonoBehaviour
     [SerializeField] private GameObject[] prefab;
     [SerializeField] private GameObject[] Goldprefab;
     [SerializeField] private Vector3 startPosition; // The starting position of the first object
-    [SerializeField] private float yOffset = 2.8f; // The amount to offset the Y position by for each new object
+    [SerializeField] private float yOffset = 2.7f; // The amount to offset the Y position by for each new object
     public GameObject GridContinue;
     public int intCountGrid;
     public int CountGrid;
@@ -40,7 +40,7 @@ public class CreatePlatform : MonoBehaviour
         }
         CountGrid++;
         Vector3 newPosition = lastObject.transform.position + new Vector3(0, yOffset, 0); // Calculate the new position
-        if (goldIs != 100)
+        if (goldIs <= 98)
         {
             lastObject = Instantiate(prefab[i], newPosition, Quaternion.identity); // Instantiate the first object
         }
